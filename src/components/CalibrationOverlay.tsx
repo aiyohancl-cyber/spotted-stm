@@ -3,7 +3,7 @@ import { STATIONS, LINE_COLORS, type Station } from '@/data/stations'
 import { Copy, Check, RotateCcw, Download, X } from 'lucide-react'
 
 const MAP_W = 1591
-const MAP_H = 2400
+const MAP_H = 1620
 
 interface CalibrationOverlayProps {
   imgRef: React.RefObject<HTMLImageElement | null>

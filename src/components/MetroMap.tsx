@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { CalibrationOverlay } from './CalibrationOverlay'
 
 const MAP_W = 1591
-const MAP_H = 2400
+const MAP_H = 1620
 
 interface MetroMapProps {
   onStationClick: (station: Station) => void
