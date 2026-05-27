@@ -1,20 +1,29 @@
 import { useEffect, useState } from 'react'
-import { Users, MessageCircle, Flame, X, Loader2 } from 'lucide-react'
+import { MessageCircle, Flame, X, Loader2 } from 'lucide-react'
 import type { Station } from '@/data/stations'
 import { LINE_COLORS, LINE_NAMES } from '@/data/stations'
-import { getActivityForStation, type Post, type PostType } from '@/data/posts'
+import type { Post, PostType } from '@/data/posts'
 import { listPosts, createPost, subscribeToStation, countPostsToday } from '@/lib/api'
 import { PostCard } from './PostCard'
 import { PostComposer } from './PostComposer'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-const HEAT_LABEL = {
+type Heat = 'low' | 'normal' | 'moderate' | 'high'
+
+const HEAT_LABEL: Record<Heat, string> = {
   low: 'Activité faible',
   normal: 'Activité normale',
   moderate: 'Activité modérée',
   high: 'Activité élevée',
-} as const
+}
+
+function heatFromPostsToday(count: number): Heat {
+  if (count === 0) return 'low'
+  if (count <= 2) return 'normal'
+  if (count <= 5) return 'moderate'
+  return 'high'
+}
 
 interface StationChannelProps {
   station: Station
@@ -26,7 +35,7 @@ export function StationChannel({ station, onClose }: StationChannelProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [postsToday, setPostsToday] = useState<number>(0)
-  const activity = getActivityForStation(station.name)
+  const heat = heatFromPostsToday(postsToday)
 
   useEffect(() => {
     let cancelled = false
@@ -105,16 +114,12 @@ export function StationChannel({ station, onClose }: StationChannelProps) {
       </div>
       <div className="flex gap-4 px-4 py-2 bg-muted/50 border-b border-border text-xs text-muted-foreground flex-wrap">
         <div className="inline-flex items-center gap-1.5">
-          <Users className="w-3.5 h-3.5" />
-          <span>{activity.active} actifs</span>
-        </div>
-        <div className="inline-flex items-center gap-1.5">
           <MessageCircle className="w-3.5 h-3.5" />
           <span>{postsToday} post{postsToday === 1 ? '' : 's'} aujourd'hui</span>
         </div>
         <div className="inline-flex items-center gap-1.5">
           <Flame className="w-3.5 h-3.5" />
-          <span>{HEAT_LABEL[activity.heat]}</span>
+          <span>{HEAT_LABEL[heat]}</span>
         </div>
       </div>
       {error && (

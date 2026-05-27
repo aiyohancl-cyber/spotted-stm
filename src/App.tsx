@@ -34,12 +34,9 @@ function App() {
               </p>
             </div>
           </div>
-          <div className="text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              1 247 en ligne
-            </span>
-          </div>
+          <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-medium px-2 py-1 rounded-full bg-yellow-400/15 text-yellow-700 dark:text-yellow-300 border border-yellow-400/30">
+            Bêta
+          </span>
         </div>
       </header>
 
